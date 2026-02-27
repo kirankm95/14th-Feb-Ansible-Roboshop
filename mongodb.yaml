@@ -5,7 +5,7 @@
   tasks:
   - name: copy mongodb yum repo file
     ansible.builtin.copy:
-      src: /home/centos/14th-Feb-Ansible-Roboshop/mongo.repo
+      src: mongo.repo
       dest: /etc/yum.repos.d/mongo.repo
   - name: install mondb-org package
     ansible.builtin.package:
@@ -14,7 +14,7 @@
   - name: allow remote connections
     ansible.builtin.replace:
       path: /etc/mongod.conf
-      regexp: '127.0.0.1 '
+      regexp: '127.0.0.1'
       replace: '0.0.0.0'
   - name: start and enable mondb-org
     ansible.builtin.service:

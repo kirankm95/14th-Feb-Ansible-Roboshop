@@ -1,0 +1,10 @@
+- name: redis playbook
+  become: yes
+  ignore_errors: yes
+  hosts: redis
+  tasks:
+  - name: install rpm for repo file of redis
+    ansible.builtin.dnf:
+      name: "https://rpms.remirepo.net/enterprise/remi-release-8.rpm"
+      state: present
+      

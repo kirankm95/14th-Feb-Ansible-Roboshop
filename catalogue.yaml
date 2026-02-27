@@ -1,0 +1,52 @@
+- name: playbook for catalogue
+  become: yes
+  hosts: catalogue
+  ignore_errors: yes
+  tasks:
+  - name: disable nodejs 10 version and enable 18 version
+    ansible.builtin.shell: "dnf module disable nodejs -y; dnf module enable nodejs:18 -y
+  - name: install nodejs package of 18 version
+    ansible.builtin.package:
+      name: nodejs
+      state: present
+  - name: create user
+    ansible.builtin.user:
+      name: roboshop
+      state: present
+  - name: create directory for application
+    ansible.builtin.file:
+      name: /app
+      state: present
+  - name: downloand application code
+    ansible.builtin.get_url:
+      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      dest: /tmp
+  - name: unzip application code
+    ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      remote_src: yes
+  - name: install dependencies
+    ansible.builtin.shell: npm install 
+  - name: copy catalogue service file
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+  - name: deamon reload
+    ansible.builtin.systemd_service:
+      daemon_reload: "true"
+  - name: copy mongo repo yum file
+    ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+  - name: install mongodb client package
+    ansible.builtin.package:
+      name: mongodb-org-shell
+      state: present
+  - name: load schema
+    ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/catalogue.js"
+  - name: start and enable catalogue service
+    ansible.builtin.service:
+      name: catalogue
+      state: started
+      enabled: yes
