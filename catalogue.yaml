@@ -17,7 +17,7 @@
     ansible.builtin.file:
       name: /app
       state: directory
-  - name: downloand application code
+  - name: download application code
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
       dest: /tmp
@@ -25,7 +25,8 @@
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
-      remote_src: yes
+      args:
+        remote_src: yes
   - name: install dependencies
     ansible.builtin.shell: npm install 
     chdir: /app
