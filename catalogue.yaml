@@ -44,7 +44,7 @@
       name: mongodb-org-shell
       state: present
   - name: load schema
-    ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/catalogue.js"
+    ansible.builtin.shell: 'mongo --host mongodb.kiranku.online </app/schema/catalogue.js'
   - name: start and enable catalogue service
     ansible.builtin.service:
       name: catalogue
