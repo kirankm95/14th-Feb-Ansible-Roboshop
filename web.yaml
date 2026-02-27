@@ -13,7 +13,7 @@
       state: absent
   - name: downloand application code
     ansible.builtin.get_url:
-      url: /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip
+      url: https://roboshop-builds.s3.amazonaws.com/web.zip
       dest: /tmp
   - name: unzip application code
     ansible.builtin.unarchive:
