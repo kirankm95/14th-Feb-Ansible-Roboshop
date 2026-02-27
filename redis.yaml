@@ -4,7 +4,20 @@
   hosts: redis
   tasks:
   - name: install rpm for repo file of redis
-    ansible.builtin.dnf:
-      name: "https://rpms.remirepo.net/enterprise/remi-release-8.rpm"
+    ansible.builtin.shell: "dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y --skip-broken"
+  - name: disable nodejs 10 version and enable 18 version
+    ansible.builtin.shell: "dnf module enable redis:remi-6.2 -y"
+  - name: install redis  package
+    ansible.builtin.package:
+      name: redis
       state: present
-      
+  - name: allow remote connections
+    ansible.builtin.replace:
+      path: /etc/redis/redis.conf
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+  - name: start and enable redis
+    ansible.builtin.service:
+      name: redis
+      state: started
+      enabled: yes
