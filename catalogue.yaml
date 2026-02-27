@@ -16,7 +16,7 @@
   - name: create directory for application
     ansible.builtin.file:
       name: /app
-      state: present
+      state: directory
   - name: downloand application code
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
@@ -28,6 +28,7 @@
       remote_src: yes
   - name: install dependencies
     ansible.builtin.shell: npm install 
+    chdir: /app
   - name: copy catalogue service file
     ansible.builtin.copy:
       src: catalogue.service
