@@ -6,7 +6,7 @@
   - name: install rpm for repo file of redis
     ansible.builtin.shell: "dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y --skip-broken"
   - name: disable nodejs 10 version and enable 18 version
-    ansible.builtin.shell: dnf module enable "redis:6" -y
+    ansible.builtin.shell: "dnf module enable redis:6 -y"
   - name: install redis  package
     ansible.builtin.package:
       name: redis
