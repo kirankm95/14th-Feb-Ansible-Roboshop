@@ -1,6 +1,6 @@
 - name: playbook for payment
   become: yes
-  hosts: payment
+  hosts: payments
   ignore_errors: yes
   tasks:
   - name: install packages
