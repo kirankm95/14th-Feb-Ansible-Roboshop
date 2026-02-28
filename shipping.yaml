@@ -21,7 +21,7 @@
       dest: /tmp
   - name: unzip application code
     ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
+      src: /tmp/shipping.zip
       dest: /app
       remote_src: yes
   - name: install dependencies
@@ -30,7 +30,7 @@
       chdir: /app
   - name: move jar file and rename
     ansible.builtin.copy:
-      src: /app/target/shipping-1.0.jar
+      src: /app/target/shipping-1.0.jar.original
       dest: /app/shipping.jar
       remote_src: yes
   - name: copy shipping service file
@@ -45,7 +45,7 @@
       name: mysql
       state: present
   - name: load schema
-    ansible.builtin.shell: 'mysql -h mysql.kiranku.online -uroot -pRoboShop@1 < /app/schema/shipping.sql'
+    ansible.builtin.shell: 'mysql -h mysql.kiranku.online -uroot -pRoboShop@1 < /app/db/shipping.sql'
   - name: start and enable catalogue service
     ansible.builtin.service:
       name: shipping
