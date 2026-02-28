@@ -1,7 +1,7 @@
 - name: playbook for mysql
   hosts: mysql
   become: yes
-  ignore_erros: yes
+  ignore_errors: yes
   tasks:
   - name: disable MySQL 8 version
     ansible.builtin.shell: "dnf module disable mysql -y"
