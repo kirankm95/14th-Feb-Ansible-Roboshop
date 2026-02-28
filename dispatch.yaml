@@ -3,7 +3,8 @@
   hosts: dispatch
   ignore_errors: yes
   tasks:
-  ansible.builtin.package:
+  - name: package installation 
+    ansible.builtin.package:
     name: golang
     state: present
 - name: create user
