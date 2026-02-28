@@ -3,43 +3,44 @@
   hosts: payment
   ignore_errors: yes
   tasks:
-  ansible.builtin.package:
-    name: "{{item}}"
-    state: present
-  loop:
-    - python36 
-    - gcc 
-    - python3-devel
-- name: create user
-  ansible.builtin.user:
-    name: roboshop
-    state: present
-- name: create directory for application
-  ansible.builtin.file:
-    name: /app
-    state: directory
-- name: download application code
-  ansible.builtin.get_url:
-    url: https://roboshop-builds.s3.amazonaws.com/payment.zip
-    dest: /tmp
-- name: unzip application code
-  ansible.builtin.unarchive:
-    src: /tmp/payment.zip
-    dest: /app
-    remote_src: yes
-- name: install dependencies
-  ansible.builtin.shell: "pip3.6 install -r requirements.txt"
-  args:
-    chdir: /app
-- name: copy payment  service file
-  ansible.builtin.copy:
-    src: payment.service
-    dest: /etc/systemd/system/payment.service
-- name: deamon reload
-  ansible.builtin.systemd_service:
-    daemon_reload: true
-- name: start and enable catalogue service
-  ansible.builtin.service:
-    name: payment
-    state: started
-    enabled: yes
+  - name: install packages
+    ansible.builtin.package:
+      name: "{{item}}"
+      state: present
+    loop:
+      - python36 
+      - gcc 
+      - python3-devel
+  - name: create user
+    ansible.builtin.user:
+      name: roboshop
+      state: present
+  - name: create directory for application
+    ansible.builtin.file:
+      name: /app
+      state: directory
+  - name: download application code
+    ansible.builtin.get_url:
+      url: https://roboshop-builds.s3.amazonaws.com/payment.zip
+      dest: /tmp
+  - name: unzip application code
+    ansible.builtin.unarchive:
+      src: /tmp/payment.zip
+      dest: /app
+      remote_src: yes
+  - name: install dependencies
+    ansible.builtin.shell: "pip3.6 install -r requirements.txt"
+    args:
+      chdir: /app
+  - name: copy payment  service file
+    ansible.builtin.copy:
+      src: payment.service
+      dest: /etc/systemd/system/payment.service
+  - name: deamon reload
+    ansible.builtin.systemd_service:
+      daemon_reload: true
+  - name: start and enable catalogue service
+    ansible.builtin.service:
+      name: payment
+      state: started
+      enabled: yes
