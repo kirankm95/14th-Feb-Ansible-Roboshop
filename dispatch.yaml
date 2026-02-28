@@ -1,0 +1,41 @@
+- name: playbook for dispatch
+  become: yes
+  hosts: dispatch
+  ignore_errors: yes
+  tasks:
+  ansible.builtin.package:
+    name: golang
+    state: present
+- name: create user
+  ansible.builtin.user:
+    name: roboshop
+    state: present
+- name: create directory for application
+  ansible.builtin.file:
+    name: /app
+    state: directory
+- name: download application code
+  ansible.builtin.get_url:
+    url: https://roboshop-builds.s3.amazonaws.com/dispatch.zip
+    dest: /tmp
+- name: unzip application code
+  ansible.builtin.unarchive:
+    src: /tmp/dispatch.zip
+    dest: /app
+    remote_src: yes
+- name: install dependencies
+  ansible.builtin.shell: "go mod init dispatch; go get ; go build"
+  args:
+    chdir: /app
+- name: copy dispatch service file
+  ansible.builtin.copy:
+    src: dispatch.service
+    dest: /etc/systemd/system/dispatch.service
+- name: deamon reload
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+- name: start and enable dispatch service
+  ansible.builtin.service:
+    name: dispatch
+    state: started
+    enabled: yes

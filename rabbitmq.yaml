@@ -17,4 +17,4 @@
       state: started
       enabled: yes
   - name:  create one user for the application.
-    ansible.builtin.shell: 'rabbitmqctl add_user roboshop roboshop123; rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"''
+    ansible.builtin.shell: 'rabbitmqctl add_user roboshop roboshop123; rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"'
